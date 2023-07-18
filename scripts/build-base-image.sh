@@ -8,11 +8,10 @@ if [[ $# != 2 ]]; then
   exit 1
 fi
 
-docker_build_command="docker build"
 buildx_driver="$(docker buildx inspect | sed -n 's/^Driver:\s*\(.*\)$/\1/p')"
-if [[ "$buildx_driver" == "docker-container" ]]; then
-  echo "This runner does seem to have buildx support. Trying to build multi-architecture images."
-  docker_build_command="docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64"
+if [[ "$buildx_driver" != "docker-container" ]]; then
+  echo "This runner does not seem to have buildx support. Could not build all images." >&2
+  exit 1
 fi
 
 RELEASE_IMAGE="$1"
@@ -22,7 +21,9 @@ PUSH_TO_GITLAB="$2"
 GL_PUSH_TAG="$RELEASE_IMAGE:base"
 
 # Build and tag image
-$docker_build_command -f Dockerfile.base --tag "$GL_PUSH_TAG" .
+docker buildx build \
+  --platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+  -f Dockerfile.base --tag "$GL_PUSH_TAG" .
 
 # Push image
 if [[ -n "$PUSH_TO_GITLAB" ]]; then
