@@ -10,8 +10,8 @@ fi
 
 buildx_driver="$(docker buildx inspect | sed -n 's/^Driver:\s*\(.*\)$/\1/p')"
 if [[ "$buildx_driver" != "docker-container" ]]; then
-  echo "This runner does not seem to have buildx support. Could not build all images." >&2
-  exit 1
+  echo "This runner does not seem to have buildx support. Trying to rectify by creating buildx environment." >&2
+  docker buildx create --use
 fi
 
 RELEASE_IMAGE="$1"
