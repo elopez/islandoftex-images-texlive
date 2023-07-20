@@ -10,7 +10,7 @@ fi
 
 buildx_driver="$(docker buildx inspect | sed -n 's/^Driver:\s*\(.*\)$/\1/p')"
 if [[ "$buildx_driver" != "docker-container" ]]; then
-  echo "This runner does not seem to have buildx support. Trying to rectify by creating buildx environment." >&2
+  echo "This runner does not seem set up for buildx building. Trying to rectify by creating buildx environment." >&2
   docker buildx create --use
 fi
 
