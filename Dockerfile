@@ -1,4 +1,5 @@
-FROM registry.gitlab.com/islandoftex/images/texlive:base
+ARG SOURCE_IMAGE=registry.gitlab.com/islandoftex/images/texlive:base
+FROM $SOURCE_IMAGE
 
 # whether to install documentation and/or source files
 # this has to be yes or no
