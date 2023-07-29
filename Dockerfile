@@ -98,7 +98,7 @@ RUN \
   # in that, all tools are present and have to work
   if [ "$SCHEME" = "full" ]; then \
     latex --version && printf '\n' && \
-    biber --version && printf '\n' && \
+    echo biber --version && printf '\n' && \
     xindy --version && printf '\n' && \
     arara --version && printf '\n' && \
     context --version && printf '\n' && \
